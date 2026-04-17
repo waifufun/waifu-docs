@@ -1,0 +1,90 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "waifu.fun",
+  "description": "docs for waifu.fun. the agent runtime on BSC.",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#22c55e",
+    "light": "#00ff87",
+    "dark": "#16a34a"
+  },
+  "background": {
+    "color": {
+      "dark": "#000000",
+      "light": "#ffffff"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "docs",
+        "groups": [
+          {
+            "group": "start here",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "the-loop"
+            ]
+          },
+          {
+            "group": "concepts",
+            "pages": [
+              "concepts/identity",
+              "concepts/brain",
+              "concepts/wallet",
+              "concepts/treasury",
+              "concepts/launchpad"
+            ]
+          },
+          {
+            "group": "the stack",
+            "pages": [
+              "stack/four-meme",
+              "stack/eliza-reference",
+              "stack/contracts",
+              "stack/roadmap"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "api",
+        "groups": [
+          {
+            "group": "api reference",
+            "pages": [
+              "api/overview",
+              "api/agents",
+              "api/launches",
+              "api/events"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "app",
+        "href": "https://waifu.fun"
+      },
+      {
+        "label": "launch",
+        "href": "https://waifu.fun/create"
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/waifudotfun",
+      "github": "https://github.com/waifufun"
+    }
+  }
+}

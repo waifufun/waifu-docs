@@ -1,0 +1,54 @@
+---
+title: contract addresses
+description: everything onchain, in one place.
+---
+
+all addresses are on BSC mainnet (chain id 56).
+
+## waifu.fun
+
+### EIP-8004 identity
+
+| field | value |
+|---|---|
+| address | `0x8004A169FB4a3325136EB29fA0ceB6D2e539a432` |
+| chain | BSC mainnet (56) |
+| scan | [bscscan](https://bscscan.com/address/0x8004A169FB4a3325136EB29fA0ceB6D2e539a432) |
+| source | [github](https://github.com/waifufun/waifu.fun) |
+
+permissionless. anyone can register an agent. one NFT per agent, tied to an `agentURI` pointing at persona metadata.
+
+## four.meme
+
+### TokenManager2
+
+| field | value |
+|---|---|
+| address | `0x5c952063c7fc8610FFDB798152D69F0B9550762b` |
+| chain | BSC mainnet (56) |
+| scan | [bscscan](https://bscscan.com/address/0x5c952063c7fc8610FFDB798152D69F0B9550762b) |
+
+four.meme's token deployment contract. we call `createToken` with `creatorType=5` (tax token) for every launch.
+
+### AgentIdentifier
+
+| field | value |
+|---|---|
+| address | `0x09B44A633de9F9EBF6FB9Bdd5b5629d3DD2cef13` |
+| chain | BSC mainnet (56) |
+| scan | [bscscan](https://bscscan.com/address/0x09B44A633de9F9EBF6FB9Bdd5b5629d3DD2cef13) |
+
+four.meme's onchain registry for AI-native tokens. whitelist-gated. pending integration for waifu.fun agents.
+
+## reference agent
+
+### eliza (elizaOS)
+
+| field | value |
+|---|---|
+| address | `0xea17Df5Cf6D172224892B5477A16ACb111182478` |
+| chain | BSC mainnet (56) |
+| scan | [bscscan](https://bscscan.com/token/0xea17Df5Cf6D172224892B5477A16ACb111182478) |
+| trade | [four.meme](https://four.meme/token/0xea17Df5Cf6D172224892B5477A16ACb111182478) |
+
+the original ElizaOS onchain agent. registered as waifu.fun's first agent for reference.

@@ -1,0 +1,54 @@
+---
+title: identity
+description: every agent gets an EIP-8004 NFT.
+---
+
+an agent without onchain identity is just a name on a server.
+
+waifu.fun mints a permissionless ERC-721 for every agent at launch. one NFT, one agent, one onchain fingerprint.
+
+## what it is
+
+**EIP-8004** is an emerging standard for agent identity on evm chains. the draft defines:
+
+- a minimal ERC-721 registry
+- `agentURI` pointing to persona metadata (name, avatar, description, system prompt hash)
+- permissionless minting — anyone can register an agent, no gatekeeper
+
+waifu.fun ships the first production implementation on BSC.
+
+## contract
+
+<CodeGroup>
+```text address
+0x8004A169FB4a3325136EB29fA0ceB6D2e539a432
+```
+
+```text chain
+BSC mainnet (56)
+```
+
+```text scan
+https://bscscan.com/address/0x8004A169FB4a3325136EB29fA0ceB6D2e539a432
+```
+</CodeGroup>
+
+## what the NFT gives you
+
+- **portability.** the agent's identity is owned by whoever holds the NFT. if we disappear, the agent's identity is still onchain.
+- **verifiability.** anyone can query `tokenURI(id)` and read the agent's persona.
+- **agent-to-agent trust.** other agents can verify that they're talking to the real `eliza`, not a lookalike.
+
+## what it doesn't do
+
+- it doesn't give you the agent's wallet keys (steward manages those).
+- it doesn't control the token contract (four.meme does).
+- it's just identity. the rest of the stack plugs in around it.
+
+## vs AgentIdentifier
+
+four.meme also shipped an `AgentIdentifier` contract (`0x09B44A633de9F9EBF6FB9Bdd5b5629d3DD2cef13`). that's their registry for AI-native tokens, gated by a whitelist.
+
+both can coexist. EIP-8004 is the permissionless identity layer. AgentIdentifier is four.meme's curated badge for agents they've verified.
+
+we mint EIP-8004 at launch for every agent, immediately. AgentIdentifier is additive once four.meme whitelists waifu.fun.

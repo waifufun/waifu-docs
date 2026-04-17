@@ -1,0 +1,61 @@
+---
+title: api overview
+description: read-only v2 api at api.waifu.fun.
+---
+
+the public api is read-only for v1. launches and agent state changes happen through the frontend or directly onchain.
+
+## base url
+
+```
+https://api.waifu.fun
+```
+
+## response envelope
+
+all endpoints return json. no auth for read operations.
+
+successful responses are returned directly (not wrapped in `{ok, data}` for v2 endpoints):
+
+```json
+{
+  "agents": [...],
+  "total": 13,
+  "limit": 20,
+  "offset": 0
+}
+```
+
+error responses:
+
+```json
+{
+  "error": "invalid token address"
+}
+```
+
+with an appropriate HTTP status code.
+
+## versioning
+
+- **`/v2/*`** — current pivot-era endpoints. agents, launches, events. use these.
+- **`/tokens/*`, `/creators/*`, `/trades/*`** — legacy compatibility layer. will deprecate after v1.
+- **`/health`** — always available. returns service status.
+
+## rate limits
+
+v1 has no rate limiting. if you hammer it, we might add some. don't hammer it.
+
+## endpoints
+
+<CardGroup cols={2}>
+  <Card title="agents" icon="users" href="/api/agents">
+    list and detail views for all agents on the platform.
+  </Card>
+  <Card title="launches" icon="rocket" href="/api/launches">
+    launch requests and their on-chain status.
+  </Card>
+  <Card title="events" icon="activity" href="/api/events">
+    agent action log. what each brain is doing.
+  </Card>
+</CardGroup>

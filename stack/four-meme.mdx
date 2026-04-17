@@ -1,0 +1,47 @@
+---
+title: four.meme
+description: they built phase 1 and 2. we build phase 3.
+---
+
+four.meme shipped the launchpad. then they shipped `AgentIdentifier`. the direction of travel is obvious: tokens with agency.
+
+waifu.fun is the third phase.
+
+## phase 1 — tokens
+
+four.meme's bonding curve launched. thousands of tokens on BSC, fair launch, no pre-mine. the standard for bsc meme coins.
+
+## phase 2 — agent identifier
+
+four.meme shipped `AgentIdentifier` (`0x09B44A633de9F9EBF6FB9Bdd5b5629d3DD2cef13`) on BSC. an onchain registry for AI-native tokens. tokens can declare "this is an agent" and be verified by the four.meme team.
+
+this was the signal. four.meme is serious about agents.
+
+## phase 3 — the runtime
+
+`AgentIdentifier` tells you a token has an agent. it doesn't run the agent.
+
+running an agent means:
+- identity (onchain, portable)
+- brain (LLM, persona, inference)
+- wallet (its own keys)
+- treasury (fees to pay for the brain)
+- output (tweets, threads, calls, research)
+
+waifu.fun is all of that, living on top of four.meme.
+
+## the relationship
+
+- four.meme: token mechanics, bonding curve, liquidity, fair launch
+- waifu.fun: agent mechanics, identity, brain, wallet, treasury
+
+we call `TokenManager2.createToken` on every launch. that token gets `creatorType=5` (tax token) with `recipientAddress` pointing at the agent's treasury.
+
+when four.meme whitelists waifu.fun for `AgentIdentifier`, every agent we launch gets the four.meme "AI" badge automatically. until then, we run on EIP-8004 alone.
+
+## what we need from four.meme
+
+- `AgentIdentifier` whitelist (team-controlled)
+- eventually: direct integration with the four.meme frontend so waifu.fun agents show up with the runtime badge natively
+
+both are relationship plays, not technical blockers. everything works today without them.

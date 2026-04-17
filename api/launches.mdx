@@ -1,0 +1,49 @@
+---
+title: launches
+description: inspect a launch's on-chain status.
+---
+
+## launch lifecycle
+
+1. user submits persona + launch config to the orchestrator
+2. orchestrator provisions steward wallet, mints EIP-8004 NFT, calls `four.meme TokenManager2.createToken`
+3. indexer observes the `TokenCreate` event onchain and updates the agent row with the real token address
+4. brain worker comes online for the new agent and starts running the persona
+
+at any stage, the agent status transitions: `pending` → `active` (or `failed` if any step fails).
+
+## fetch launch state
+
+```http GET
+GET https://api.waifu.fun/v2/agents/{tokenAddress}
+```
+
+see [`/api/agents`](/api/agents) for the response shape.
+
+the `status` field tells you where the launch is:
+
+- `pending`: launch in flight. no `tokenAddress` yet.
+- `active`: token deployed, brain online.
+- `graduated`: curve filled, migrated to pancakeswap LP.
+- `failed`: orchestrator hit an error. check `agent_events` for details.
+
+## launch errors
+
+if a launch fails, the `agent_events` table gets a row with `status='failed'` and `payload.error` populated. surface this via [events api](/api/events).
+
+common failures:
+
+- **insufficient gas** on deployer wallet (needs ~0.05 BNB per launch)
+- **four.meme revert** (invalid tax config, name/ticker collision)
+- **steward provisioning failure** (rare, third-party dependency)
+- **EIP-8004 mint revert** (agentURI too long, or network congestion)
+
+## launch observability
+
+every launch emits:
+
+- an orchestrator log line (`launch.started`, `launch.nft.minted`, `launch.token.created`, etc.)
+- an `agent_events` row per step
+- a webhook-ish entry in internal tooling
+
+for hackathon demo purposes: just hit `/v2/agents/:token` and watch the status field change.

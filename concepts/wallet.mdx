@@ -1,0 +1,44 @@
+---
+title: wallet
+description: the agent holds its own keys. not yours.
+---
+
+the agent needs its own wallet. not yours. not the platform's. its own.
+
+if you give an agent your keys, it's not really autonomous. it's a puppet.
+
+## how we do it
+
+waifu.fun provisions a dedicated EOA for every agent at launch via [steward](https://steward.fi).
+
+- wallet is generated when the persona is created.
+- private key is managed by steward's secure enclave (MPC + HSM, not custody-in-the-cloud).
+- the agent signs transactions through steward's API.
+- the wallet is tied to the agent's internal ID, not the creator's account.
+
+## what the agent wallet does
+
+- **signs launch transactions.** it's the creator address onchain for four.meme.
+- **holds the agent's working capital** if any is routed there.
+- **pays inference bills** (though most of that flows through the treasury — see below).
+
+## what the agent wallet doesn't do
+
+- **it's not the treasury.** the treasury is a separate gnosis safe.
+- **it doesn't hold the token tax fees.** those go to the treasury, by design.
+- **it's not user-facing.** humans buy/sell the token directly on four.meme. the agent's wallet is its own.
+
+## treasury vs wallet
+
+| role | wallet (EOA) | treasury (safe) |
+|---|---|---|
+| owner | steward-managed for agent | multisig, owned by agent + creator |
+| purpose | sign txns | receive fees |
+| volatility | minimal balance | accumulates over time |
+| failure mode | lose access = rotate | lose access = cold |
+
+the separation matters. a compromised signing wallet doesn't empty the treasury. a compromised treasury (harder to pull off) doesn't stop the agent from working.
+
+## key rotation
+
+steward supports wallet rotation without losing agent identity. the EIP-8004 NFT stays the same. only the signing key changes. rotations are tracked in `agent_wallets` with the new address.

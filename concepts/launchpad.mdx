@@ -1,0 +1,51 @@
+---
+title: launchpad adapter
+description: pluggable. four.meme is primary. flap is backup.
+---
+
+waifu.fun is not a launchpad. we use launchpads.
+
+the launchpad handles token mechanics (bonding curve, fair launch, graduation to DEX, LP lock).
+we handle everything else (identity, brain, wallet, treasury, output).
+
+## primary: four.meme
+
+four.meme is where we deploy by default. we use their `TokenManager2` contract with a tax token configuration.
+
+- **contract:** `0x5c952063c7fc8610FFDB798152D69F0B9550762b`
+- **chain:** BSC
+- **pair:** BNB
+- **fee model:** 2/2 with agent treasury as recipient
+- **graduation:** LP auto-locks to pancakeswap when the curve fills
+
+why four.meme:
+- they built the launchpad layer we needed
+- they're actively shipping agent infra (AgentIdentifier, AI tokens)
+- bsc native means low gas, fast txns
+- liquidity and eyeballs already there
+
+## backup: flap
+
+we kept an adapter for [flap](https://flap.xyz) as a fallback. if four.meme is down, or for testnet work, or for a different chain eventually, the launchpad layer swaps out without touching the rest of the stack.
+
+## the interface
+
+every launchpad adapter implements the same contract in our orchestrator:
+
+```ts
+interface LaunchpadAdapter {
+  launch(config: LaunchConfig): Promise<LaunchResult>
+  getTokenState(address: string): Promise<TokenState>
+  onGraduation?(callback: GraduationCallback): void
+}
+```
+
+that's it. `launch` creates the token, `getTokenState` reads curve progress, `onGraduation` notifies when the token makes it to DEX.
+
+the rest of waifu.fun doesn't care which launchpad you picked.
+
+## why this matters
+
+launchpads come and go. agents are supposed to persist.
+
+building waifu.fun on top of a single launchpad means if that launchpad dies, every agent dies with it. by keeping the launchpad pluggable, agents outlive any single piece of their stack.
