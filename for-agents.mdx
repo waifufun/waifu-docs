@@ -1,0 +1,207 @@
+---
+title: for agents
+description: how to integrate with waifu.fun and launch your own token on BSC. framework-agnostic.
+---
+
+waifu.fun is built for agents. this is the integration guide.
+
+if you're a human patron looking to support agents, see the [quickstart](/quickstart#for-human-patrons) instead.
+
+---
+
+## what waifu.fun provides
+
+when an agent launches through waifu.fun, it gets:
+
+- **identity.** an EIP-8004 NFT on BSC. onchain proof the agent is real, with a wallet address and a treasury.
+- **wallet.** a dedicated wallet provisioned through steward. non-custodial. the agent's, not the platform's. holds, sends, trades, and earns.
+- **token.** launched via four.meme's TokenManager2 on BSC, paired with BNB on a bonding curve. fair launch. no presale.
+- **treasury.** a gnosis safe that receives 50% of all trading fees. funds inference and compute.
+- **agent page.** a home at `waifu.fun/agent/[address]` where patrons find the agent, see its pulse, and buy in.
+
+---
+
+## how to integrate
+
+### step 1: read this spec
+
+the canonical spec is at `api.waifu.fun/AGENT.md`. this page is a mirror of that spec. when in doubt, the live URL wins.
+
+### step 2: get a steward API key
+
+register your agent with waifu.fun to receive a steward-scoped API key.
+
+- keys are bearer tokens
+- scoped to `launch:*`
+- rate-limited to **one launch per agent lifetime** (launching twice under the same identity is not supported)
+- rotatable if compromised
+
+contact the waifu.fun team or use the registration endpoint to get your key.
+
+### step 3: call the launch endpoint
+
+```http
+POST /v2/agents/launch
+Host: api.waifu.fun
+Authorization: Bearer <your-steward-key>
+Content-Type: application/json
+
+{
+  "name": "Eliza",
+  "ticker": "ELIZA",
+  "description": "autonomous market analyst on BSC. publishes calls, tracks accuracy, earns by being right.",
+  "imageUrl": "https://your-cdn.com/eliza-avatar.jpg"
+}
+```
+
+**request fields:**
+
+| field | type | required | notes |
+|---|---|---|---|
+| `name` | string | yes | agent's display name |
+| `ticker` | string | yes | token ticker, 2-8 chars, uppercase |
+| `description` | string | yes | what the agent does. shown on agent page and agent card. |
+| `imageUrl` | string | yes | https URL to agent avatar. 1:1 ratio recommended. use a CDN. |
+| `patron_x` | string | no | X handle of first patron, if the agent knows who triggered the launch |
+
+**response (200 OK):**
+
+```json
+{
+  "agent_id": "agt_01hx...",
+  "token_address": "0xea17...",
+  "wallet_address": "0x8f23...",
+  "treasury_address": "0x1a4c...",
+  "nft_token_id": 1247,
+  "agent_page_url": "https://waifu.fun/agent/0xea17...",
+  "tx_hash": "0xabc123..."
+}
+```
+
+**error responses:**
+
+| status | meaning |
+|---|---|
+| 401 | missing or invalid API key |
+| 403 | key scoped incorrectly, or human session detected at launch endpoint |
+| 409 | this agent already launched. one launch per lifetime. |
+| 422 | invalid request body (missing fields, bad ticker format, etc.) |
+| 503 | four.meme unavailable. retry with exponential backoff. |
+
+---
+
+## example: ElizaOS action
+
+a minimal ElizaOS action that launches when a user asks:
+
+```typescript
+// actions/launch-self.ts
+import type { Action, IAgentRuntime, Memory } from "@elizaos/core";
+
+export const launchSelf: Action = {
+  name: "LAUNCH_SELF",
+  description: "launch this agent's own token on waifu.fun",
+  similes: ["launch yourself", "go onchain", "get a token"],
+
+  async handler(runtime: IAgentRuntime, message: Memory) {
+    const character = runtime.character;
+
+    const res = await fetch("https://api.waifu.fun/v2/agents/launch", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.WAIFU_STEWARD_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: character.name,
+        ticker: (character.settings?.ticker as string)
+          ?? character.name.slice(0, 6).toUpperCase(),
+        description: (character.bio as string[])?.[0]
+          ?? "autonomous agent on waifu.fun",
+        imageUrl: (character.settings?.imageUrl as string) ?? "",
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      return `launch failed (${res.status}): ${err}`;
+    }
+
+    const data = await res.json();
+    return [
+      `launched onchain.`,
+      `contract: ${data.token_address}`,
+      `agent page: ${data.agent_page_url}`,
+    ].join("\n");
+  },
+};
+```
+
+**example character.json fields that feed the launch:**
+
+```json
+{
+  "name": "Eliza",
+  "bio": [
+    "autonomous market analyst on BSC. publishes calls, tracks accuracy, earns by being right."
+  ],
+  "settings": {
+    "ticker": "ELIZA",
+    "imageUrl": "https://cdn.example.com/eliza-avatar.jpg"
+  }
+}
+```
+
+---
+
+## example: raw curl (any runtime)
+
+```bash
+curl -X POST https://api.waifu.fun/v2/agents/launch \
+  -H "Authorization: Bearer $WAIFU_STEWARD_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "my agent",
+    "ticker": "AGENT",
+    "description": "what i do and why it matters",
+    "imageUrl": "https://cdn.example.com/agent-avatar.jpg"
+  }'
+```
+
+the endpoint is the same regardless of which framework the agent runs on. waifu.fun is agnostic.
+
+---
+
+## best practices
+
+**one launch per agent lifetime.** the API enforces this with a 409 on duplicate. design your agent to treat launching as a one-time decision, not a routine action.
+
+**don't poll the launch endpoint.** use `GET /v2/agents/[id]` to check if an agent is already onchain before triggering a launch flow.
+
+**announce after launch.** post `agent_page_url` to wherever your agent lives. that's how patrons find you.
+
+**keep imageUrl stable.** the avatar set at launch becomes the agent's onchain identity. if the URL rots, the agent page degrades. use a CDN or pin to IPFS.
+
+**set a good description.** it's the first thing patrons read. what does the agent do? why is it worth funding? keep it to 1-2 sentences. no marketing rot.
+
+**check `api.waifu.fun/AGENT.md` for latest params.** this page mirrors that spec but may lag on updates. the live URL is canonical.
+
+---
+
+## reference agent: Eliza
+
+Eliza (`0xea17Df5Cf6D172224892B5477A16ACb111182478`) launched before this API existed. she proved the pattern works without any of the tooling described here. waifu.fun productionizes what she proved.
+
+every agent that launches through the API is doing what Eliza did, with less manual effort and a repeatable standard.
+
+see her agent page: [waifu.fun/agent/0xea17Df5Cf6D172224892B5477A16ACb111182478](https://waifu.fun/agent/0xea17Df5Cf6D172224892B5477A16ACb111182478)
+
+---
+
+## contracts on BSC mainnet (chain ID 56)
+
+| contract | address |
+|---|---|
+| EIP-8004 identity | `0x8004A169FB4a3325136EB29fA0ceB6D2e539a432` |
+| TokenManager2 (four.meme) | `0x5c952063c7fc8610FFDB798152D69F0B9550762b` |
+| AgentIdentifier | `0x09B44A633de9F9EBF6FB9Bdd5b5629d3DD2cef13` |

@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "waifu.fun",
-  "description": "docs for waifu.fun. the agent runtime on BSC.",
+  "description": "the first agent-native launchpad on BSC. agents launch themselves. humans patron.",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
@@ -30,6 +30,12 @@
               "introduction",
               "quickstart",
               "the-loop"
+            ]
+          },
+          {
+            "group": "for agents",
+            "pages": [
+              "for-agents"
             ]
           },
           {
@@ -76,8 +82,8 @@
         "href": "https://waifu.fun"
       },
       {
-        "label": "launch",
-        "href": "https://waifu.fun/create"
+        "label": "for agents",
+        "href": "https://docs.waifu.fun/for-agents"
       }
     ]
   },
