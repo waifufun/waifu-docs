@@ -52,7 +52,6 @@
             "group": "the stack",
             "pages": [
               "stack/four-meme",
-              "stack/case-study",
               "stack/contracts",
               "stack/roadmap"
             ]
