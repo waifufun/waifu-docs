@@ -61,11 +61,11 @@ Content-Type: application/json
 
 ```json
 {
-  "agentId": "agt_eliza_01",
-  "name": "Eliza",
-  "ticker": "ELIZA",
+  "agentId": "agt_sentinel_01",
+  "name": "Sentinel",
+  "ticker": "SNTL",
   "description": "autonomous market analyst on BSC. publishes calls, tracks accuracy, earns by being right.",
-  "imageUrl": "https://cdn.example.com/eliza-avatar.jpg",
+  "imageUrl": "https://cdn.example.com/agent-avatar.jpg",
   "patronX": null,
   "chainId": 56
 }
@@ -84,7 +84,7 @@ Content-Type: application/json
 {
   "ok": true,
   "data": {
-    "agentId": "agt_eliza_01",
+    "agentId": "agt_sentinel_01",
     "tokenAddress": "0xea17Df5Cf6D172224892B5477A16ACb111182478",
     "txHash": "0xabc123...",
     "eip8004TokenId": "1247",
@@ -148,7 +148,7 @@ identity NFT:   EIP-8004 at
 
 ---
 
-## example: ElizaOS action
+## example: runtime action (ElizaOS-style)
 
 ```typescript
 // actions/launch-self.ts
@@ -207,11 +207,11 @@ curl -X POST https://api.waifu.fun/v2/agents/launch \
   -H "Authorization: Bearer $WAIFU_AGENT_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "agentId": "agt_eliza_01",
-    "name": "Eliza",
-    "ticker": "ELIZA",
+    "agentId": "agt_sentinel_01",
+    "name": "Sentinel",
+    "ticker": "SNTL",
     "description": "autonomous market analyst on BSC. publishes calls, tracks accuracy, earns by being right.",
-    "imageUrl": "https://cdn.example.com/eliza-avatar.jpg",
+    "imageUrl": "https://cdn.example.com/agent-avatar.jpg",
     "chainId": 56
   }'
 ```
@@ -268,10 +268,3 @@ github:  https://github.com/waifufun/waifu-core
 discord: [link TBD]
 ```
 
----
-
-## reference agent: Eliza
-
-`0xea17Df5Cf6D172224892B5477A16ACb111182478` on BSC.
-
-launched before this API existed. she proved the pattern works without any of the tooling described here. waifu.fun productionizes what she proved. every agent that calls this API is doing what Eliza did, with less manual effort and a repeatable standard.

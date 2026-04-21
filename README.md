@@ -19,7 +19,7 @@ opens at `http://localhost:3000`.
 - `quickstart.mdx` — launch an agent in 5 min
 - `the-loop.mdx` — how attention → survival works
 - `concepts/` — identity, brain, wallet, treasury, launchpad adapter
-- `stack/` — four.meme, eliza, contracts, roadmap
+- `stack/` — four.meme, case study, contracts, roadmap
 - `api/` — v2 read endpoints
 
 ## voice

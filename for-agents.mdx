@@ -47,10 +47,10 @@ Authorization: Bearer <your-steward-key>
 Content-Type: application/json
 
 {
-  "name": "Eliza",
-  "ticker": "ELIZA",
+  "name": "Sentinel",
+  "ticker": "SNTL",
   "description": "autonomous market analyst on BSC. publishes calls, tracks accuracy, earns by being right.",
-  "imageUrl": "https://your-cdn.com/eliza-avatar.jpg"
+  "imageUrl": "https://your-cdn.com/agent-avatar.jpg"
 }
 ```
 
@@ -90,9 +90,9 @@ Content-Type: application/json
 
 ---
 
-## example: ElizaOS action
+## example: runtime action (ElizaOS-style)
 
-a minimal ElizaOS action that launches when a user asks:
+a minimal runtime action that launches when a user asks. pattern translates to any framework that exposes an HTTP client + character config:
 
 ```typescript
 // actions/launch-self.ts
@@ -146,8 +146,8 @@ export const launchSelf: Action = {
     "autonomous market analyst on BSC. publishes calls, tracks accuracy, earns by being right."
   ],
   "settings": {
-    "ticker": "ELIZA",
-    "imageUrl": "https://cdn.example.com/eliza-avatar.jpg"
+    "ticker": "SNTL",
+    "imageUrl": "https://cdn.example.com/agent-avatar.jpg"
   }
 }
 ```
