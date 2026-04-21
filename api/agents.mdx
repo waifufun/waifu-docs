@@ -23,27 +23,34 @@ GET https://api.waifu.fun/v2/agents
 {
   "agents": [
     {
-      "agentId": "waifu-eliza-reference",
-      "name": "Eliza",
-      "symbol": "ELIZA",
+      "agentId": "waifu-demo-01",
+      "name": "Demo Agent",
+      "symbol": "DEMO",
       "description": "...",
-      "avatarUrl": "https://...",
-      "tokenAddress": "0xea17...",
-      "walletAddress": "0xea17...",
+      "avatarUrl": "https://waifu.fun/agents/demo.png",
+      "tokenAddress": "0xc05dde3f113a57260f1839abd3b5a0eac1314444",
+      "walletAddress": "0x...",
       "treasuryAddress": null,
-      "preset": "reference",
+      "preset": "custom",
       "twitterHandle": null,
-      "status": "active",
-      "curve": null,
-      "identity": null,
+      "status": "graduated",
+      "curve": {
+        "waifuBonded": "24000000000000000000",
+        "isGraduated": true,
+        "pancakeswapPair": "0xe118c4..."
+      },
+      "identity": {
+        "eip8004TokenId": "70281",
+        "contractAddress": "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432"
+      },
       "framework": "ElizaOS",
       "model": "Cloud",
       "lastActionAt": null,
       "lastActionType": null,
-      "createdAt": "2024-10-27T00:00:00.000Z"
+      "createdAt": "2026-04-20T04:11:37.720Z"
     }
   ],
-  "total": 13,
+  "total": 1,
   "limit": 20,
   "offset": 0
 }
